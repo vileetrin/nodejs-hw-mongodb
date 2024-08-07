@@ -27,14 +27,13 @@ const getContactById = async (req, res, next) => {
 };
 
 const createContact = async (req, res, next) => {
+
   const createdContact = await ContactService.createContact(req.body);
-  res
-    .status(201)
-    .send({
-      status: 201,
-      message: 'Successfully created a contact!',
-      data: createdContact,
-    });
+  res.status(201).send({
+    status: 201,
+    message: 'Successfully created a contact!',
+    data: createdContact,
+  });
 };
 
 const updateContact = async (req, res, next) => {
@@ -48,14 +47,20 @@ const updateContact = async (req, res, next) => {
 };
 
 const deleteContact = async (req, res, next) => {
-    const { contactId } = req.params;
-    const deletedContact = await ContactService.deleteContact(contactId);
+  const { contactId } = req.params;
+  const deletedContact = await ContactService.deleteContact(contactId);
 
-     if (!deletedContact) {
-      throw createHttpError(404, 'Contact not found!');     
-    }
+  if (!deletedContact) {
+    throw createHttpError(404, 'Contact not found!');
+  }
 
-    res.status(204).send();
-}
+  res.status(204).send();
+};
 
-export { getContacts, getContactById, createContact, updateContact, deleteContact };
+export {
+  getContacts,
+  getContactById,
+  createContact,
+  updateContact,
+  deleteContact,
+};
