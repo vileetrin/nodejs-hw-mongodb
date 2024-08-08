@@ -16,7 +16,7 @@ export const createContact = async (payload) => {
 }
 
 export const updateContact = async (contactId, payload, option = {}) => {
-  const result = await Contacts.findByIdAndUpdate({ _id: contactId }, payload);
+  const result = await Contacts.findOneAndUpdate({ _id: contactId }, payload, {new: true, ...option});
 
   if (!result || !result.value) return null;
 
