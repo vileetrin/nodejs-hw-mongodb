@@ -16,14 +16,12 @@ export const createContact = async (payload) => {
 }
 
 export const updateContact = async (contactId, payload, option = {}) => {
-  const result = await Contacts.findOneAndUpdate({ _id: contactId }, payload, {new: true, ...option});
+  const result = await Contacts.findByIdAndUpdate({ _id: contactId }, payload);
 
-  if (!result || !result.value) return null;
+  if (!result) return null;
 
-  return {
-    contact: result.value,
-    isNew: Boolean(result?.lastErrorObject?.upserted),
-  };
+
+  return result;
 }
 
 export const deleteContact = async (contactId) => {
