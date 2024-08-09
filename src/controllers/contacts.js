@@ -15,6 +15,7 @@ const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
 
   const contact = await ContactService.getContactById(contactId);
+  
   if (!contact) {
     return next(createHttpError(404, 'Contact not found'));
   }
@@ -39,6 +40,10 @@ const createContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   const { contactId } = req.params;
   const contact = await ContactService.updateContact(contactId, req.body);
+
+  if (!contact) {
+    throw createHttpError(404, 'Contact not found!');
+  }
 
   res.json({
     status: 200,
