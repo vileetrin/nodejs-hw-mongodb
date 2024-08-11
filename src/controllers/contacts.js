@@ -1,9 +1,16 @@
 import createHttpError from 'http-errors';
 
 import * as ContactService from '../services/contacts.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
 const getContacts = async (req, res) => {
-  const contacts = await ContactService.getAllContacts();
+  const { page, perPage } = parsePaginationParams(req.query);
+  
+  const contacts = await ContactService.getAllContacts(
+    page,
+    perPage,
+  );
+
   res.json({
     status: 200,
     message: 'Successfully found contacts!',
@@ -15,7 +22,7 @@ const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
 
   const contact = await ContactService.getContactById(contactId);
-  
+
   if (!contact) {
     return next(createHttpError(404, 'Contact not found'));
   }
@@ -28,7 +35,6 @@ const getContactById = async (req, res, next) => {
 };
 
 const createContact = async (req, res, next) => {
-
   const createdContact = await ContactService.createContact(req.body);
   res.status(201).send({
     status: 201,
