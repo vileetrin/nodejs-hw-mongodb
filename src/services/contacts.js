@@ -1,25 +1,42 @@
 import Contacts from '../db/contacts.js';
+import { calculatePaginationData } from '../utils/calculatePaginationdata.js';
+import { SORT_ORDER } from '../constants/sortOrder.js';
 
-export const getAllContacts = async ({ page, perPage }) => {
+export const getAllContacts = async ({
+  page = 1,
+  perPage = 10,
+  sortOrder = SORT_ORDER.ASC,
+  sortBy = '_id',
+  filter = {},
+}) => {
   const limit = perPage;
-  const skip = page > 0 ? (page - 1) * perPage : 0;
+  const skip = (page - 1) * perPage;
 
   const contactQuery = Contacts.find();
 
-  const [contacts, count] = await Promise.all([
-    contactQuery.skip(skip).limit(limit).exec(),
-    Contacts.countDocuments(contactQuery),
+  if (filter.contactType) {
+    contactQuery.where('contactType').equals(filter.contactType);
+  }
+
+  if (filter.isFavourite !== undefined) {
+    contactQuery.where('isFavorite').equals(filter.isFavourite);
+  }
+
+  const [contactsCount, contacts] = await Promise.all([
+    Contacts.find().merge(contactQuery).countDocuments(),
+
+    contactQuery
+      .skip(skip)
+      .limit(limit)
+      .sort({ [sortBy]: sortOrder })
+      .exec(),
   ]);
 
-  const totalPages = Math.ceil(count / perPage);
+  const paginationData = calculatePaginationData(contactsCount, perPage, page);
 
   return {
-    contacts,
-    page,
-    perPage,
-    totalItems: count,
-    hasNextPage: totalPages - page > 0,
-    hasPreviousPage: page > 1,
+    data: contacts,
+    ...paginationData,
   };
 };
 
