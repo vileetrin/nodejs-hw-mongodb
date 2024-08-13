@@ -56,7 +56,7 @@ const updateContact = async (req, res, next) => {
   res.json({
     status: 200,
     message: 'Successfully patched a contact!',
-    data: contact,
+    data: contact.contact,
   });
 };
 

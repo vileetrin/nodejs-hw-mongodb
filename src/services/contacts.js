@@ -18,8 +18,8 @@ export const getAllContacts = async ({
     contactQuery.where('contactType').equals(filter.contactType);
   }
 
-  if (filter.isFavorite !== undefined) {
-    contactQuery.where('isFavorite').equals(filter.isFavorite);
+  if (filter.isFavourite !== undefined) {
+    contactQuery.where('isFavourite').equals(filter.isFavourite);
   }
 
   const [contactsCount, contacts] = await Promise.all([
@@ -51,11 +51,14 @@ export const createContact = async (payload) => {
 };
 
 export const updateContact = async (contactId, payload, option = {}) => {
-  const result = await Contacts.findByIdAndUpdate({ _id: contactId }, payload);
+  const result = await Contacts.findByIdAndUpdate({ _id: contactId }, payload, {new: true});
 
   if (!result) return null;
 
-  return result;
+  return {
+    contact: result,
+    isNew: Boolean(result?.lastErrorObject?.upserted),
+  }
 };
 
 export const deleteContact = async (contactId) => {

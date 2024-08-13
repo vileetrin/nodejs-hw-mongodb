@@ -16,8 +16,8 @@ export const contactSchema = Joi.object({
   email: Joi.string().email().messages({
     'string.base': 'Please, enter a valid email',
   }),
-  isFavorite: Joi.boolean().messages({
-    'boolean.base': 'Favorite field should be a boolean',
+  isFavourite: Joi.boolean().messages({
+    'boolean.base': 'Favourite field should be a boolean',
   }),
   contactType: Joi.string()
     .valid('home', 'work', 'personal')
