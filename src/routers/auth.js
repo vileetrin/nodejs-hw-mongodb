@@ -8,7 +8,7 @@ import { registerUserSchema } from '../validations/auth.js';
 import { logoutUserController } from '../controllers/auth.js';
 import { registerUserController } from '../controllers/auth.js';
 import { loginUserController } from '../controllers/auth.js';
-import { refreshUserSessionController } from '../controllers/auth.js';
+import { refreshUsersSessionController } from '../controllers/auth.js';
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -27,8 +27,8 @@ router.post(
   ctrlWrapper(loginUserController),
 );
 
-router.post('/logout', ctrlWrapper(logoutUserController));
+router.post('/logout', jsonParser, ctrlWrapper(logoutUserController));
 
-router.post('/refresh', ctrlWrapper(refreshUserSessionController));
+router.post('/refresh', jsonParser, ctrlWrapper(refreshUsersSessionController));
 
 export default router;

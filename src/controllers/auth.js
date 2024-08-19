@@ -58,6 +58,7 @@ const setupSession = (res, session) => {
     httpOnly: true,
     expires: new Date(Date.now() + THIRTY_DAYS),
   });
+
   res.cookie('sessionId', session._id, {
     httpOnly: true,
     expires: new Date(Date.now() + THIRTY_DAYS),
@@ -66,7 +67,7 @@ const setupSession = (res, session) => {
 
 
 
-export const refreshUserSessionController = async (req, res) => {
+export const refreshUsersSessionController = async (req, res) => {
   const session = await refreshUsersSession({
     sessionId: req.cookies.sessionId,
     refreshToken: req.cookies.refreshToken,
