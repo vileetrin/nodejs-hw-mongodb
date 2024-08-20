@@ -49,7 +49,7 @@ export const getContactById = async (contactId, userId) => {
 };
 
 export const createContact = async (payload) => {
-  const contact = await Contacts.create({payload, userId: payload.userId});
+  const contact = await Contacts.create(payload);
   return contact;
 };
 
