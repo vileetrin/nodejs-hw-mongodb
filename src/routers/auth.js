@@ -2,13 +2,21 @@ import express from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
 
-import { loginUserSchema } from '../validations/auth.js';
-import { registerUserSchema } from '../validations/auth.js';
+import {
+  loginUserSchema,
+  registerUserSchema,
+  sendResetEmailSchema,
+  resetPasswordSchema,
+} from '../validations/auth.js';
 
-import { logoutUserController } from '../controllers/auth.js';
-import { registerUserController } from '../controllers/auth.js';
-import { loginUserController } from '../controllers/auth.js';
-import { refreshUsersSessionController } from '../controllers/auth.js';
+import {
+  logoutUserController,
+  registerUserController,
+  loginUserController,
+  refreshUsersSessionController,
+  sendResetEmailController,
+  resetPasswordController,
+} from '../controllers/auth.js';
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -30,5 +38,17 @@ router.post(
 router.post('/logout', jsonParser, ctrlWrapper(logoutUserController));
 
 router.post('/refresh', jsonParser, ctrlWrapper(refreshUsersSessionController));
+
+router.post(
+  '/send-reset-email',
+  validateBody(sendResetEmailSchema),
+  ctrlWrapper(sendResetEmailController),
+);
+
+router.post(
+  '/reset-pwd',
+  validateBody(resetPasswordSchema),
+  ctrlWrapper(resetPasswordController),
+);
 
 export default router;
