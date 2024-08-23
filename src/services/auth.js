@@ -17,6 +17,8 @@ import {
 import { env } from '../utils/env.js';
 import { sendEmail } from '../utils/sendMail.js';
 
+
+
 export const registerUser = async (payload) => {
   const user = await Users.findOne({ email: payload.email });
   if (user) throw createHttpError(409, 'Email in use');
@@ -28,6 +30,8 @@ export const registerUser = async (payload) => {
     password: encryptedPassword,
   });
 };
+
+
 
 export const loginUser = async (payload) => {
   const user = await Users.findOne({ email: payload.email });
@@ -54,9 +58,13 @@ export const loginUser = async (payload) => {
   });
 };
 
+
+
 export const logoutUser = async (sessionId) => {
   await Sessions.deleteOne({ _id: sessionId });
 };
+
+
 
 const createSession = () => {
   const accessToken = randomBytes(30).toString('base64');
@@ -69,6 +77,8 @@ const createSession = () => {
     refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAYS),
   };
 };
+
+
 
 export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
   const session = await Sessions.findOne({
@@ -96,6 +106,8 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
     ...newSession,
   });
 };
+
+
 
 export const sendResetToken = async (email) => {
   const user = await Users.findOne({ email });
@@ -143,6 +155,8 @@ export const sendResetToken = async (email) => {
     );
   }
 };
+
+
 
 export const resetPassword = async (payload) => {
   let entries;
